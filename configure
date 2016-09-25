@@ -1,0 +1,3 @@
+--disable-gusb
+--disable-polkit
+--disable-argyllcms-sensor

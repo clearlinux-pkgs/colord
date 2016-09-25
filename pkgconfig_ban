@@ -1,0 +1,6 @@
+# This file contains pkgconfig build requirements that get picked up
+# but are undesirable. One entry per line, no whitespace.
+colord-gtk
+sane-backends
+polkit-gobject-1
+gusb
