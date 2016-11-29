@@ -230,6 +230,7 @@ libcolordprivate.so.2:cd_color_rgb_array_new
 libcolordprivate.so.2:cd_color_rgb_copy
 libcolordprivate.so.2:cd_color_rgb_dup
 libcolordprivate.so.2:cd_color_rgb_free
+libcolordprivate.so.2:cd_color_rgb_from_wavelength
 libcolordprivate.so.2:cd_color_rgb_get_type
 libcolordprivate.so.2:cd_color_rgb_interpolate
 libcolordprivate.so.2:cd_color_rgb_new
@@ -504,6 +505,7 @@ libcolordprivate.so.2:cd_spectrum_normalize_max
 libcolordprivate.so.2:cd_spectrum_planckian_new
 libcolordprivate.so.2:cd_spectrum_planckian_new_full
 libcolordprivate.so.2:cd_spectrum_resample
+libcolordprivate.so.2:cd_spectrum_resample_to_size
 libcolordprivate.so.2:cd_spectrum_set_data
 libcolordprivate.so.2:cd_spectrum_set_end
 libcolordprivate.so.2:cd_spectrum_set_id
