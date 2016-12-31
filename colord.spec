@@ -4,7 +4,7 @@
 #
 Name     : colord
 Version  : 1.3.4
-Release  : 2
+Release  : 3
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.3.4.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.3.4.tar.xz
 Summary  : colord is a system daemon for managing color devices
@@ -102,6 +102,7 @@ locales components for the colord package.
 
 %build
 export LANG=C
+export SOURCE_DATE_EPOCH=1483227762
 %configure --disable-static --disable-gusb \
 --disable-polkit \
 --disable-argyllcms-sensor
@@ -256,18 +257,22 @@ rm -rf %{buildroot}
 /usr/include/colord-1/colord/cd-spectrum.h
 /usr/include/colord-1/colord/cd-transform.h
 /usr/include/colord-1/colord/cd-version.h
-/usr/lib64/*.so
 /usr/lib64/girepository-1.0/Colord-1.0.typelib
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/libcolord.so
+/usr/lib64/libcolordprivate.so
+/usr/lib64/pkgconfig/colord.pc
 /usr/share/gir-1.0/*.gir
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
 /usr/lib64/colord-plugins/libcd_plugin_camera.so
 /usr/lib64/colord-plugins/libcd_plugin_scanner.so
 /usr/lib64/colord-sensors/libcolord_sensor_dummy.so
+/usr/lib64/libcolord.so.2
+/usr/lib64/libcolord.so.2.0.5
+/usr/lib64/libcolordprivate.so.2
+/usr/lib64/libcolordprivate.so.2.0.5
 
-%files locales -f colord.lang 
+%files locales -f colord.lang
 %defattr(-,root,root,-)
 
