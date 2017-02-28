@@ -1,6 +1,73 @@
+commit 54723dc6e3373a63a43cf814ad7424932bd996f0
+Author: Richard Hughes <richard@hughsie.com>
+Date:   2017-02-27
+
+    Release colord 1.3.5
+
+M	NEWS
+M	doc/website/download.html
+
+commit ca66abe9f45a957bf60b659983f73cbad722e6f3
+Author: Richard Hughes <richard@hughsie.com>
+Date:	2017-02-09
+
+    Add cd_color_get_blackbody_rgb_full()
+
+    This adds table data which uses a Plankian locus below 5000K which
+    is more
+    visualy pleasing for natural night mode.
+
+M	lib/colord/cd-color.c
+M	lib/colord/cd-color.h
+M	lib/colord/cd-test-private.c
+
+commit 18b1c41bc7775d5f632e44e4958083ba36876372
+Author: Richard Hughes <richard@hughsie.com>
+Date:	2017-01-02
+
+    libcolord: Add cd_spectrum_multiply_scalar()
+
+M	lib/colord/cd-spectrum.c
+M	lib/colord/cd-spectrum.h
+
+commit 54f25d7158485034a13bd29065708eac21ce606c
+Author: Richard Hughes <richard@hughsie.com>
+Date:	2017-01-02
+
+    trivial: Require a C99 compiler
+
+M	configure.ac
+
+commit 16457f37efc50d4568932a250d4c0ae95baed709
+Author: Richard Hughes <richard@hughsie.com>
+Date:	2016-11-21
+
+    Check the parsed context arguments in the session helper
+
+    Found by Coverity.
+
+M	contrib/session-helper/cd-main.c
+
+commit 570e24d6a3c5252bc5b8ba548d3fc47c7b134617
+Author: Richard Hughes <richard@hughsie.com>
+Date:	2016-11-21
+
+    trivial: Disable argyllcms harder on RHEL
+
+M	contrib/colord.spec.in
+
+commit 0d71a9eacc198020fb033747a3fa8c4cf0bfe64d
+Author: Richard Hughes <richard@hughsie.com>
+Date:	2016-11-21
+
+    trivial: post release version bump
+
+M	RELEASE
+M	configure.ac
+
 commit b4329ab9e5dfe87ac46db9df82bc014d658ee26a
 Author: Richard Hughes <richard@hughsie.com>
-Date:   2016-11-21
+Date:	2016-11-21
 
     Release colord 1.3.4
 
