@@ -6,7 +6,7 @@
 #
 Name     : colord
 Version  : 1.3.5
-Release  : 4
+Release  : 5
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz
 Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz.asc
@@ -105,7 +105,7 @@ locales components for the colord package.
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1488293159
+export SOURCE_DATE_EPOCH=1491314157
 %configure --disable-static --disable-gusb \
 --disable-polkit \
 --disable-argyllcms-sensor
@@ -119,7 +119,7 @@ export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1488293159
+export SOURCE_DATE_EPOCH=1491314157
 rm -rf %{buildroot}
 %make_install
 %find_lang colord
@@ -147,6 +147,7 @@ rm -rf %{buildroot}
 
 %files data
 %defattr(-,root,root,-)
+/usr/lib64/girepository-1.0/Colord-1.0.typelib
 /usr/share/bash-completion/completions/colormgr
 /usr/share/color/icc/colord/AdobeRGB1998.icc
 /usr/share/color/icc/colord/AppleRGB.icc
@@ -227,6 +228,7 @@ rm -rf %{buildroot}
 /usr/share/dbus-1/interfaces/org.freedesktop.ColorManager.xml
 /usr/share/dbus-1/services/org.freedesktop.ColorHelper.service
 /usr/share/dbus-1/system-services/org.freedesktop.ColorManager.service
+/usr/share/gir-1.0/*.gir
 /usr/share/glib-2.0/schemas/org.freedesktop.ColorHelper.gschema.xml
 /usr/share/polkit-1/actions/org.freedesktop.color.policy
 
@@ -261,11 +263,9 @@ rm -rf %{buildroot}
 /usr/include/colord-1/colord/cd-spectrum.h
 /usr/include/colord-1/colord/cd-transform.h
 /usr/include/colord-1/colord/cd-version.h
-/usr/lib64/girepository-1.0/Colord-1.0.typelib
 /usr/lib64/libcolord.so
 /usr/lib64/libcolordprivate.so
 /usr/lib64/pkgconfig/colord.pc
-/usr/share/gir-1.0/*.gir
 
 %files lib
 %defattr(-,root,root,-)
