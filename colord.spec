@@ -6,7 +6,7 @@
 #
 Name     : colord
 Version  : 1.3.5
-Release  : 5
+Release  : 6
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz
 Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz.asc
@@ -24,6 +24,7 @@ BuildRequires : gobject-introspection-dev
 BuildRequires : gtk-doc
 BuildRequires : gtk-doc-dev
 BuildRequires : intltool
+BuildRequires : intltool-dev
 BuildRequires : libxslt-bin
 BuildRequires : perl(XML::Parser)
 BuildRequires : pkgconfig(bash-completion)
@@ -37,6 +38,7 @@ BuildRequires : pkgconfig(libsystemd)
 BuildRequires : pkgconfig(libudev)
 BuildRequires : pkgconfig(sqlite3)
 BuildRequires : valgrind
+Patch1: 0001-Use-stateless-d-bus-directory.patch
 
 %description
 colord
@@ -102,11 +104,15 @@ locales components for the colord package.
 
 %prep
 %setup -q -n colord-1.3.5
+%patch1 -p1
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1491314157
-%configure --disable-static --disable-gusb \
+export SOURCE_DATE_EPOCH=1493037844
+%autogen --disable-static --disable-gusb \
 --disable-polkit \
 --disable-argyllcms-sensor
 make V=1  %{?_smp_mflags}
@@ -115,11 +121,11 @@ make V=1  %{?_smp_mflags}
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1491314157
+export SOURCE_DATE_EPOCH=1493037844
 rm -rf %{buildroot}
 %make_install
 %find_lang colord
@@ -228,6 +234,7 @@ rm -rf %{buildroot}
 /usr/share/dbus-1/interfaces/org.freedesktop.ColorManager.xml
 /usr/share/dbus-1/services/org.freedesktop.ColorHelper.service
 /usr/share/dbus-1/system-services/org.freedesktop.ColorManager.service
+/usr/share/dbus-1/system.d/org.freedesktop.ColorManager.conf
 /usr/share/gir-1.0/*.gir
 /usr/share/glib-2.0/schemas/org.freedesktop.ColorHelper.gschema.xml
 /usr/share/polkit-1/actions/org.freedesktop.color.policy
