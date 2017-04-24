@@ -1,0 +1,26 @@
+From 6e48b1d21d60242bff094263ab5923acb75377d9 Mon Sep 17 00:00:00 2001
+From: Ikey Doherty <michael.i.doherty@intel.com>
+Date: Mon, 24 Apr 2017 13:28:49 +0100
+Subject: [PATCH] Use stateless d-bus directory
+
+Signed-off-by: Ikey Doherty <michael.i.doherty@intel.com>
+---
+ data/Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/Makefile.am b/data/Makefile.am
+index e558432..0890bfb 100644
+--- a/data/Makefile.am
++++ b/data/Makefile.am
+@@ -9,7 +9,7 @@ SUBDIRS = 						\
+ 	ti1
+ 
+ if HAVE_DAEMON
+-dbusdir = $(sysconfdir)/dbus-1/system.d
++dbusdir = $(datadir)/dbus-1/system.d
+ dist_dbus_DATA = org.freedesktop.ColorManager.conf
+ 
+ dbusservicemaindir = $(datadir)/dbus-1/system-services
+-- 
+2.12.2
+
