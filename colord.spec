@@ -6,7 +6,7 @@
 #
 Name     : colord
 Version  : 1.3.5
-Release  : 6
+Release  : 7
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz
 Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz.asc
@@ -36,6 +36,7 @@ BuildRequires : pkgconfig(gudev-1.0)
 BuildRequires : pkgconfig(lcms2)
 BuildRequires : pkgconfig(libsystemd)
 BuildRequires : pkgconfig(libudev)
+BuildRequires : pkgconfig(polkit-gobject-1)
 BuildRequires : pkgconfig(sqlite3)
 BuildRequires : valgrind
 Patch1: 0001-Use-stateless-d-bus-directory.patch
@@ -111,9 +112,8 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1493037844
+export SOURCE_DATE_EPOCH=1493402042
 %autogen --disable-static --disable-gusb \
---disable-polkit \
 --disable-argyllcms-sensor
 make V=1  %{?_smp_mflags}
 
@@ -125,7 +125,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1493037844
+export SOURCE_DATE_EPOCH=1493402042
 rm -rf %{buildroot}
 %make_install
 %find_lang colord
