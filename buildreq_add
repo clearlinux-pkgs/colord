@@ -3,3 +3,4 @@
 gobject-introspection-dev
 valgrind
 intltool-dev
+gobject-introspection

@@ -5,12 +5,12 @@
 # Source0 file verified with key 0x17ACBA8DFA970E17 (richard@hughsie.com)
 #
 Name     : colord
-Version  : 1.3.5
-Release  : 8
-URL      : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz
-Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz
-Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.3.5.tar.xz.asc
-Summary  : colord is a system daemon for managing color devices
+Version  : 1.4.1
+Release  : 9
+URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.1.tar.xz
+Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.1.tar.xz
+Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.4.1.tar.xz.asc
+Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0
 Requires: colord-bin
@@ -18,28 +18,22 @@ Requires: colord-config
 Requires: colord-lib
 Requires: colord-data
 Requires: colord-locales
-BuildRequires : docbook-xml
-BuildRequires : gettext
+BuildRequires : gobject-introspection
 BuildRequires : gobject-introspection-dev
-BuildRequires : gtk-doc
-BuildRequires : gtk-doc-dev
-BuildRequires : intltool
 BuildRequires : intltool-dev
-BuildRequires : libxslt-bin
-BuildRequires : perl(XML::Parser)
+BuildRequires : meson
+BuildRequires : ninja
 BuildRequires : pkgconfig(bash-completion)
-BuildRequires : pkgconfig(dbus-1)
-BuildRequires : pkgconfig(gio-unix-2.0)
-BuildRequires : pkgconfig(glib-2.0)
-BuildRequires : pkgconfig(gnome-desktop-3.0)
+BuildRequires : pkgconfig(colord)
 BuildRequires : pkgconfig(gudev-1.0)
+BuildRequires : pkgconfig(gusb)
 BuildRequires : pkgconfig(lcms2)
-BuildRequires : pkgconfig(libsystemd)
-BuildRequires : pkgconfig(libudev)
+BuildRequires : pkgconfig(libxml-2.0)
 BuildRequires : pkgconfig(polkit-gobject-1)
 BuildRequires : pkgconfig(sqlite3)
+BuildRequires : pkgconfig(udev)
+BuildRequires : python3
 BuildRequires : valgrind
-Patch1: 0001-Use-stateless-d-bus-directory.patch
 
 %description
 colord
@@ -104,30 +98,19 @@ locales components for the colord package.
 
 
 %prep
-%setup -q -n colord-1.3.5
-%patch1 -p1
+%setup -q -n colord-1.4.1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1493402042
-%autogen --disable-static --disable-gusb \
---disable-argyllcms-sensor
-make V=1  %{?_smp_mflags}
-
-%check
-export LANG=C
-export http_proxy=http://127.0.0.1:9/
-export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+export SOURCE_DATE_EPOCH=1505684422
+CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false builddir
+ninja -v -C builddir
 
 %install
-export SOURCE_DATE_EPOCH=1493402042
-rm -rf %{buildroot}
-%make_install
+DESTDIR=%{buildroot} ninja -C builddir install
 %find_lang colord
 
 %files
@@ -154,6 +137,7 @@ rm -rf %{buildroot}
 %files data
 %defattr(-,root,root,-)
 /usr/lib64/girepository-1.0/Colord-1.0.typelib
+/usr/lib64/girepository-1.0/Colorhug-1.0.typelib
 /usr/share/bash-completion/completions/colormgr
 /usr/share/color/icc/colord/AdobeRGB1998.icc
 /usr/share/color/icc/colord/AppleRGB.icc
@@ -174,6 +158,7 @@ rm -rf %{buildroot}
 /usr/share/color/icc/colord/NTSC-RGB.icc
 /usr/share/color/icc/colord/PAL-RGB.icc
 /usr/share/color/icc/colord/ProPhotoRGB.icc
+/usr/share/color/icc/colord/Rec709.icc
 /usr/share/color/icc/colord/SMPTE-C-RGB.icc
 /usr/share/color/icc/colord/SwappedRedAndGreen.icc
 /usr/share/color/icc/colord/WideGamutRGB.icc
@@ -270,19 +255,36 @@ rm -rf %{buildroot}
 /usr/include/colord-1/colord/cd-spectrum.h
 /usr/include/colord-1/colord/cd-transform.h
 /usr/include/colord-1/colord/cd-version.h
+/usr/include/colord-1/colorhug/ch-common.h
+/usr/include/colord-1/colorhug/ch-device-queue.h
+/usr/include/colord-1/colorhug/ch-device.h
+/usr/include/colord-1/colorhug/ch-hash.h
+/usr/include/colord-1/colorhug/ch-inhx32.h
+/usr/include/colord-1/colorhug/ch-math.h
+/usr/include/colord-1/colorhug/ch-version.h
+/usr/include/colord-1/colorhug/colorhug.h
 /usr/lib64/libcolord.so
 /usr/lib64/libcolordprivate.so
+/usr/lib64/libcolorhug.so
 /usr/lib64/pkgconfig/colord.pc
+/usr/lib64/pkgconfig/colorhug.pc
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/colord-plugins/libcd_plugin_camera.so
-/usr/lib64/colord-plugins/libcd_plugin_scanner.so
+/usr/lib64/colord-plugins/libcolord_sensor_camera.so
+/usr/lib64/colord-plugins/libcolord_sensor_scanner.so
+/usr/lib64/colord-sensors/libcolord_sensor_argyll.so
+/usr/lib64/colord-sensors/libcolord_sensor_colorhug.so
+/usr/lib64/colord-sensors/libcolord_sensor_dtp94.so
 /usr/lib64/colord-sensors/libcolord_sensor_dummy.so
+/usr/lib64/colord-sensors/libcolord_sensor_huey.so
+/usr/lib64/colord-sensors/libcolord_sensor_spark.so
 /usr/lib64/libcolord.so.2
 /usr/lib64/libcolord.so.2.0.5
 /usr/lib64/libcolordprivate.so.2
 /usr/lib64/libcolordprivate.so.2.0.5
+/usr/lib64/libcolorhug.so.2
+/usr/lib64/libcolorhug.so.2.0.5
 
 %files locales -f colord.lang
 %defattr(-,root,root,-)

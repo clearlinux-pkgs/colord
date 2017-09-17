@@ -1,2 +1,3 @@
---disable-gusb
---disable-argyllcms-sensor
+-Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false
+#--disable-gusb
+#--disable-argyllcms-sensor
