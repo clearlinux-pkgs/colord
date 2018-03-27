@@ -289,6 +289,7 @@ libcolord.so.2:cd_icc_set_characterization_data
 libcolord.so.2:cd_icc_set_colorspace
 libcolord.so.2:cd_icc_set_copyright
 libcolord.so.2:cd_icc_set_copyright_items
+libcolord.so.2:cd_icc_set_created
 libcolord.so.2:cd_icc_set_description
 libcolord.so.2:cd_icc_set_description_items
 libcolord.so.2:cd_icc_set_filename
@@ -713,6 +714,7 @@ libcolordprivate.so.2:cd_icc_set_characterization_data
 libcolordprivate.so.2:cd_icc_set_colorspace
 libcolordprivate.so.2:cd_icc_set_copyright
 libcolordprivate.so.2:cd_icc_set_copyright_items
+libcolordprivate.so.2:cd_icc_set_created
 libcolordprivate.so.2:cd_icc_set_description
 libcolordprivate.so.2:cd_icc_set_description_items
 libcolordprivate.so.2:cd_icc_set_filename

@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x17ACBA8DFA970E17 (richard@hughsie.com)
 #
 Name     : colord
-Version  : 1.4.1
-Release  : 11
-URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.1.tar.xz
-Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.1.tar.xz
-Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.4.1.tar.xz.asc
+Version  : 1.4.2
+Release  : 12
+URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.2.tar.xz
+Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.2.tar.xz
+Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.4.2.tar.xz.asc
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0
@@ -24,7 +24,6 @@ BuildRequires : intltool-dev
 BuildRequires : meson
 BuildRequires : ninja
 BuildRequires : pkgconfig(bash-completion)
-BuildRequires : pkgconfig(colord)
 BuildRequires : pkgconfig(gudev-1.0)
 BuildRequires : pkgconfig(gusb)
 BuildRequires : pkgconfig(lcms2)
@@ -97,14 +96,14 @@ locales components for the colord package.
 
 
 %prep
-%setup -q -n colord-1.4.1
+%setup -q -n colord-1.4.2
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1507329847
+export SOURCE_DATE_EPOCH=1522112401
 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false builddir
 ninja -v -C builddir
 
@@ -277,7 +276,6 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/lib64/colord-sensors/libcolord_sensor_dtp94.so
 /usr/lib64/colord-sensors/libcolord_sensor_dummy.so
 /usr/lib64/colord-sensors/libcolord_sensor_huey.so
-/usr/lib64/colord-sensors/libcolord_sensor_spark.so
 /usr/lib64/libcolord.so.2
 /usr/lib64/libcolord.so.2.0.5
 /usr/lib64/libcolordprivate.so.2
