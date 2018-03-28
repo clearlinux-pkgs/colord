@@ -6,7 +6,7 @@
 #
 Name     : colord
 Version  : 1.4.2
-Release  : 12
+Release  : 13
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.2.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.2.tar.xz
 Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.4.2.tar.xz.asc
@@ -103,13 +103,17 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1522112401
+export SOURCE_DATE_EPOCH=1522203430
 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false builddir
 ninja -v -C builddir
 
 %install
 DESTDIR=%{buildroot} ninja -C builddir install
 %find_lang colord
+## make_install_append content
+mkdir -p %{buildroot}/usr/share/gettext/its
+cp policy/its/polkit.*  %{buildroot}/usr/share/gettext/its
+## make_install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -218,6 +222,8 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/dbus-1/services/org.freedesktop.ColorHelper.service
 /usr/share/dbus-1/system-services/org.freedesktop.ColorManager.service
 /usr/share/dbus-1/system.d/org.freedesktop.ColorManager.conf
+/usr/share/gettext/its/polkit.its
+/usr/share/gettext/its/polkit.loc
 /usr/share/gir-1.0/*.gir
 /usr/share/glib-2.0/schemas/org.freedesktop.ColorHelper.gschema.xml
 /usr/share/polkit-1/actions/org.freedesktop.color.policy

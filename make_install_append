@@ -1,0 +1,2 @@
+mkdir -p %{buildroot}/usr/share/gettext/its
+cp policy/its/polkit.*  %{buildroot}/usr/share/gettext/its
