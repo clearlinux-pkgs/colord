@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x17ACBA8DFA970E17 (richard@hughsie.com)
 #
 Name     : colord
-Version  : 1.4.2
-Release  : 14
-URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.2.tar.xz
-Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.2.tar.xz
-Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.4.2.tar.xz.asc
+Version  : 1.4.3
+Release  : 15
+URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.3.tar.xz
+Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.3.tar.xz
+Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.4.3.tar.xz.asc
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0
@@ -17,10 +17,14 @@ Requires: colord-bin
 Requires: colord-config
 Requires: colord-lib
 Requires: colord-data
+Requires: colord-doc
 Requires: colord-locales
+BuildRequires : docbook-xml
 BuildRequires : gobject-introspection
 BuildRequires : gobject-introspection-dev
+BuildRequires : gtk-doc
 BuildRequires : intltool-dev
+BuildRequires : libxslt
 BuildRequires : meson
 BuildRequires : ninja
 BuildRequires : pkgconfig(bash-completion)
@@ -78,6 +82,14 @@ Provides: colord-devel
 dev components for the colord package.
 
 
+%package doc
+Summary: doc components for the colord package.
+Group: Documentation
+
+%description doc
+doc components for the colord package.
+
+
 %package lib
 Summary: lib components for the colord package.
 Group: Libraries
@@ -96,15 +108,15 @@ locales components for the colord package.
 
 
 %prep
-%setup -q -n colord-1.4.2
+%setup -q -n colord-1.4.3
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1523141880
-CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false builddir
+export SOURCE_DATE_EPOCH=1524059744
+CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false builddir
 ninja -v -C builddir
 
 %install
@@ -266,6 +278,46 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/lib64/libcolorhug.so
 /usr/lib64/pkgconfig/colord.pc
 /usr/lib64/pkgconfig/colorhug.pc
+
+%files doc
+%defattr(-,root,root,-)
+/usr/share/gtk-doc/html/colord/colord-CdClient.html
+/usr/share/gtk-doc/html/colord/colord-CdDevice.html
+/usr/share/gtk-doc/html/colord/colord-CdDom.html
+/usr/share/gtk-doc/html/colord/colord-CdEdid.html
+/usr/share/gtk-doc/html/colord/colord-CdIcc.html
+/usr/share/gtk-doc/html/colord/colord-CdIccStore.html
+/usr/share/gtk-doc/html/colord/colord-CdInterp.html
+/usr/share/gtk-doc/html/colord/colord-CdInterpAkima.html
+/usr/share/gtk-doc/html/colord/colord-CdInterpLinear.html
+/usr/share/gtk-doc/html/colord/colord-CdIt8.html
+/usr/share/gtk-doc/html/colord/colord-CdProfile.html
+/usr/share/gtk-doc/html/colord/colord-CdSensor.html
+/usr/share/gtk-doc/html/colord/colord-CdTransform.html
+/usr/share/gtk-doc/html/colord/colord-cd-client-sync.html
+/usr/share/gtk-doc/html/colord/colord-cd-color.html
+/usr/share/gtk-doc/html/colord/colord-cd-device-sync.html
+/usr/share/gtk-doc/html/colord/colord-cd-icc-utils.html
+/usr/share/gtk-doc/html/colord/colord-cd-it8-utils.html
+/usr/share/gtk-doc/html/colord/colord-cd-math.html
+/usr/share/gtk-doc/html/colord/colord-cd-profile-sync.html
+/usr/share/gtk-doc/html/colord/colord-cd-sensor-sync.html
+/usr/share/gtk-doc/html/colord/colord-cd-spectrum.html
+/usr/share/gtk-doc/html/colord/colord-cd-version.html
+/usr/share/gtk-doc/html/colord/colord.devhelp2
+/usr/share/gtk-doc/html/colord/home.png
+/usr/share/gtk-doc/html/colord/index.html
+/usr/share/gtk-doc/html/colord/ix01.html
+/usr/share/gtk-doc/html/colord/left-insensitive.png
+/usr/share/gtk-doc/html/colord/left.png
+/usr/share/gtk-doc/html/colord/libcolord.html
+/usr/share/gtk-doc/html/colord/libcolordprivate.html
+/usr/share/gtk-doc/html/colord/license.html
+/usr/share/gtk-doc/html/colord/right-insensitive.png
+/usr/share/gtk-doc/html/colord/right.png
+/usr/share/gtk-doc/html/colord/style.css
+/usr/share/gtk-doc/html/colord/up-insensitive.png
+/usr/share/gtk-doc/html/colord/up.png
 
 %files lib
 %defattr(-,root,root,-)

@@ -4,3 +4,6 @@ gobject-introspection-dev
 valgrind
 intltool-dev
 gobject-introspection
+docbook-xml
+gtk-doc
+libxslt
