@@ -5,50 +5,55 @@
 # Source0 file verified with key 0x17ACBA8DFA970E17 (richard@hughsie.com)
 #
 Name     : colord
-Version  : 1.4.3
-Release  : 17
-URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.3.tar.xz
-Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.3.tar.xz
-Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.4.3.tar.xz.asc
-Summary  : No detailed summary available
+Version  : 1.4.4
+Release  : 18
+URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
+Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
+Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz.asc
+Summary  : System daemon for managing color devices
 Group    : Development/Tools
 License  : GPL-2.0
-Requires: colord-bin
-Requires: colord-config
-Requires: colord-lib
-Requires: colord-data
-Requires: colord-doc
-Requires: colord-locales
+Requires: colord-bin = %{version}-%{release}
+Requires: colord-config = %{version}-%{release}
+Requires: colord-data = %{version}-%{release}
+Requires: colord-lib = %{version}-%{release}
+Requires: colord-libexec = %{version}-%{release}
+Requires: colord-license = %{version}-%{release}
+Requires: colord-locales = %{version}-%{release}
+Requires: colord-services = %{version}-%{release}
+BuildRequires : buildreq-meson
 BuildRequires : docbook-xml
 BuildRequires : gobject-introspection
 BuildRequires : gobject-introspection-dev
 BuildRequires : gtk-doc
 BuildRequires : intltool-dev
+BuildRequires : libgudev-dev
 BuildRequires : libxslt
-BuildRequires : meson
-BuildRequires : ninja
 BuildRequires : pkgconfig(bash-completion)
-BuildRequires : pkgconfig(gudev-1.0)
 BuildRequires : pkgconfig(gusb)
 BuildRequires : pkgconfig(lcms2)
-BuildRequires : pkgconfig(libxml-2.0)
 BuildRequires : pkgconfig(polkit-gobject-1)
 BuildRequires : pkgconfig(sqlite3)
 BuildRequires : pkgconfig(udev)
-BuildRequires : python3
 BuildRequires : valgrind
 
 %description
-colord
-======
-colord is a system service that makes it easy to manage, install and generate
-color profiles to accurately color manage input and output devices.
+colord sensor driver for the hueyCOLOR
+======================================
+The hueyCOLOR is a *color sensor* found in the top-end P70 and P71 ThinkPads
+from Lenovo. It is branded as a Pantone X-Rite sensor, and is similar in
+protocol to the Huey and HueyPRO devices. The sensor is located in the palm-rest,
+and so the laptop lid needs to be shut (and the display kept on) when showing
+calibration patches.
 
 %package bin
 Summary: bin components for the colord package.
 Group: Binaries
-Requires: colord-data
-Requires: colord-config
+Requires: colord-data = %{version}-%{release}
+Requires: colord-libexec = %{version}-%{release}
+Requires: colord-config = %{version}-%{release}
+Requires: colord-license = %{version}-%{release}
+Requires: colord-services = %{version}-%{release}
 
 %description bin
 bin components for the colord package.
@@ -73,10 +78,11 @@ data components for the colord package.
 %package dev
 Summary: dev components for the colord package.
 Group: Development
-Requires: colord-lib
-Requires: colord-bin
-Requires: colord-data
-Provides: colord-devel
+Requires: colord-lib = %{version}-%{release}
+Requires: colord-bin = %{version}-%{release}
+Requires: colord-data = %{version}-%{release}
+Provides: colord-devel = %{version}-%{release}
+Requires: colord = %{version}-%{release}
 
 %description dev
 dev components for the colord package.
@@ -93,10 +99,30 @@ doc components for the colord package.
 %package lib
 Summary: lib components for the colord package.
 Group: Libraries
-Requires: colord-data
+Requires: colord-data = %{version}-%{release}
+Requires: colord-libexec = %{version}-%{release}
+Requires: colord-license = %{version}-%{release}
 
 %description lib
 lib components for the colord package.
+
+
+%package libexec
+Summary: libexec components for the colord package.
+Group: Default
+Requires: colord-config = %{version}-%{release}
+Requires: colord-license = %{version}-%{release}
+
+%description libexec
+libexec components for the colord package.
+
+
+%package license
+Summary: license components for the colord package.
+Group: Default
+
+%description license
+license components for the colord package.
 
 
 %package locales
@@ -107,19 +133,30 @@ Group: Default
 locales components for the colord package.
 
 
+%package services
+Summary: services components for the colord package.
+Group: Systemd services
+
+%description services
+services components for the colord package.
+
+
 %prep
-%setup -q -n colord-1.4.3
+%setup -q -n colord-1.4.4
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1524059744
-CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false builddir
+export SOURCE_DATE_EPOCH=1552067228
+export LDFLAGS="${LDFLAGS} -fno-lto"
+CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false  builddir
 ninja -v -C builddir
 
 %install
+mkdir -p %{buildroot}/usr/share/package-licenses/colord
+cp COPYING %{buildroot}/usr/share/package-licenses/colord/COPYING
 DESTDIR=%{buildroot} ninja -C builddir install
 %find_lang colord
 
@@ -133,13 +170,9 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/bin/cd-iccdump
 /usr/bin/cd-it8
 /usr/bin/colormgr
-/usr/libexec/colord
-/usr/libexec/colord-session
 
 %files config
 %defattr(-,root,root,-)
-/usr/lib/systemd/system/colord.service
-/usr/lib/systemd/user/colord-session.service
 /usr/lib/tmpfiles.d/colord.conf
 /usr/lib/udev/rules.d/69-cd-sensors.rules
 /usr/lib/udev/rules.d/95-cd-devices.rules
@@ -280,7 +313,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/lib64/pkgconfig/colorhug.pc
 
 %files doc
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/gtk-doc/html/colord/colord-CdClient.html
 /usr/share/gtk-doc/html/colord/colord-CdDevice.html
 /usr/share/gtk-doc/html/colord/colord-CdDom.html
@@ -334,6 +367,20 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/lib64/libcolordprivate.so.2.0.5
 /usr/lib64/libcolorhug.so.2
 /usr/lib64/libcolorhug.so.2.0.5
+
+%files libexec
+%defattr(-,root,root,-)
+/usr/libexec/colord
+/usr/libexec/colord-session
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/colord/COPYING
+
+%files services
+%defattr(-,root,root,-)
+/usr/lib/systemd/system/colord.service
+/usr/lib/systemd/user/colord-session.service
 
 %files locales -f colord.lang
 %defattr(-,root,root,-)
