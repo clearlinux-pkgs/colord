@@ -6,7 +6,7 @@
 #
 Name     : colord
 Version  : 1.4.4
-Release  : 18
+Release  : 19
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
 Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz.asc
@@ -35,6 +35,7 @@ BuildRequires : pkgconfig(lcms2)
 BuildRequires : pkgconfig(polkit-gobject-1)
 BuildRequires : pkgconfig(sqlite3)
 BuildRequires : pkgconfig(udev)
+BuildRequires : pkgconfig(valgrind)
 BuildRequires : valgrind
 
 %description
@@ -149,8 +150,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1552067228
-export LDFLAGS="${LDFLAGS} -fno-lto"
+export SOURCE_DATE_EPOCH=1554792118
 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false  builddir
 ninja -v -C builddir
 
