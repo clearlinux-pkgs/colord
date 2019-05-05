@@ -6,7 +6,7 @@
 #
 Name     : colord
 Version  : 1.4.4
-Release  : 20
+Release  : 21
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
 Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz.asc
@@ -151,7 +151,14 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1554792331
+export SOURCE_DATE_EPOCH=1557082358
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false -Dvapi=true  builddir
 ninja -v -C builddir
 
