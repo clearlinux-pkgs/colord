@@ -1,0 +1,151 @@
+If the mapping database is broken, delete it.
+
+Closes #1373.
+
+From 9be580a689d1e01e2c061b0a1da6c749d83c0c2c Mon Sep 17 00:00:00 2001
+From: Ross Burton <ross.burton@intel.com>
+Date: Thu, 26 Mar 2020 15:22:14 +0000
+Subject: [PATCH 1/2] Check for errors from more sqlite calls
+
+Once the mapping database is opened we call 'PRAGMA synchronous', check
+the error code so if the database is corrupted then we can bail sooner
+rather than later.
+---
+ src/cd-mapping-db.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/src/cd-mapping-db.c b/src/cd-mapping-db.c
+index 1ef4560..f62e267 100644
+--- a/src/cd-mapping-db.c
++++ b/src/cd-mapping-db.c
+@@ -91,9 +91,17 @@ cd_mapping_db_load (CdMappingDb *mdb,
+ 	}
+ 
+ 	/* we don't need to keep doing fsync */
+-	sqlite3_exec (priv->db, "PRAGMA synchronous=OFF",
+-		      NULL, NULL, NULL);
+-
++	rc = sqlite3_exec (priv->db, "PRAGMA synchronous=OFF",
++			   NULL, NULL, &error_msg);
++	if (rc != SQLITE_OK) {
++		g_set_error (error,
++			     CD_CLIENT_ERROR,
++			     CD_CLIENT_ERROR_INTERNAL,
++			     "Failed to turn off synchronous operations: SQL error: %s",
++			     error_msg);
++		sqlite3_free (error_msg);
++		return FALSE;
++	}
+ 	/* check mappings */
+ 	rc = sqlite3_exec (priv->db, "SELECT * FROM mappings LIMIT 1",
+ 			   NULL, NULL, &error_msg);
+-- 
+2.25.1
+
+From 4135af505695b98b6eed85f5f49195b961136c26 Mon Sep 17 00:00:00 2001
+From: Ross Burton <ross.burton@intel.com>
+Date: Thu, 26 Mar 2020 15:43:39 +0000
+Subject: [PATCH 2/2] Refactor opening of mapping database and try again if
+ fails
+
+Extract the actual opening of the mapping database to a static function,
+once it is open do a quick verification of the database, and if that
+fails (corrupted database, typically) then try to delete the file and
+try again.
+
+Closes #111.
+---
+ src/cd-mapping-db.c | 57 ++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 54 insertions(+), 3 deletions(-)
+
+diff --git a/src/cd-mapping-db.c b/src/cd-mapping-db.c
+index f62e267..7a3df35 100644
+--- a/src/cd-mapping-db.c
++++ b/src/cd-mapping-db.c
+@@ -21,8 +21,10 @@
+ 
+ #include "config.h"
+ 
++#include <errno.h>
+ #include <gio/gio.h>
+ #include <glib-object.h>
++#include <glib/gstdio.h>
+ #include <sqlite3.h>
+ 
+ #include "cd-common.h"
+@@ -58,13 +60,13 @@ cd_mapping_db_convert_cb (void *data, gint argc, gchar **argv, gchar **col_name)
+ 	return rc;
+ }
+ 
+-gboolean
+-cd_mapping_db_load (CdMappingDb *mdb,
++static gboolean
++cd_mapping_db_open (CdMappingDb *mdb,
+ 		    const gchar *filename,
++		    gboolean retry,
+ 		    GError  **error)
+ {
+ 	CdMappingDbPrivate *priv = GET_PRIVATE (mdb);
+-	const gchar *statement;
+ 	gchar *error_msg = NULL;
+ 	gint rc;
+ 	g_autofree gchar *path = NULL;
+@@ -90,6 +92,55 @@ cd_mapping_db_load (CdMappingDb *mdb,
+ 		return FALSE;
+ 	}
+ 
++	/* sanity check of the database */
++	rc = sqlite3_exec (priv->db, "PRAGMA quick_check", NULL, NULL, &error_msg);
++	if (rc != SQLITE_OK) {
++		/* Database appears to be mangled, so wipe it and try again */
++		sqlite3_close (priv->db);
++		priv->db = NULL;
++
++		if (retry) {
++			if (g_unlink (filename) != 0) {
++				g_set_error (error,
++					     CD_CLIENT_ERROR,
++					     CD_CLIENT_ERROR_INTERNAL,
++					     "Cannot remove damaged database: %s",
++					     g_strerror (errno));
++				return FALSE;
++			}
++
++			return cd_mapping_db_open (mdb, filename, FALSE, error);
++		} else {
++			g_set_error (error,
++				     CD_CLIENT_ERROR,
++				     CD_CLIENT_ERROR_INTERNAL,
++				     "Cannot open mapping database: %s",
++				     error_msg);
++			sqlite3_free (error_msg);
++			return FALSE;
++		}
++	}
++
++	return TRUE;
++}
++
++gboolean
++cd_mapping_db_load (CdMappingDb *mdb,
++		    const gchar *filename,
++		    GError  **error)
++{
++	CdMappingDbPrivate *priv = GET_PRIVATE (mdb);
++	const gchar *statement;
++	gchar *error_msg = NULL;
++	gint rc;
++	g_autofree gchar *path = NULL;
++
++	g_return_val_if_fail (CD_IS_MAPPING_DB (mdb), FALSE);
++	g_return_val_if_fail (priv->db == NULL, FALSE);
++
++	if (!cd_mapping_db_open (mdb, filename, TRUE, error))
++		return FALSE;
++
+ 	/* we don't need to keep doing fsync */
+ 	rc = sqlite3_exec (priv->db, "PRAGMA synchronous=OFF",
+ 			   NULL, NULL, &error_msg);
+-- 
+2.25.1
+

@@ -6,11 +6,11 @@
 #
 Name     : colord
 Version  : 1.4.4
-Release  : 22
+Release  : 23
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
-Source99 : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz.asc
-Summary  : System daemon for managing color devices
+Source1  : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz.asc
+Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0
 Requires: colord-bin = %{version}-%{release}
@@ -38,15 +38,13 @@ BuildRequires : pkgconfig(udev)
 BuildRequires : pkgconfig(valgrind)
 BuildRequires : vala
 BuildRequires : valgrind
+Patch1: backport-remove-corrupted.patch
 
 %description
-colord sensor driver for the hueyCOLOR
-======================================
-The hueyCOLOR is a *color sensor* found in the top-end P70 and P71 ThinkPads
-from Lenovo. It is branded as a Pantone X-Rite sensor, and is similar in
-protocol to the Huey and HueyPRO devices. The sensor is located in the palm-rest,
-and so the laptop lid needs to be shut (and the display kept on) when showing
-calibration patches.
+colord
+======
+colord is a system service that makes it easy to manage, install and generate
+color profiles to accurately color manage input and output devices.
 
 %package bin
 Summary: bin components for the colord package.
@@ -145,13 +143,16 @@ services components for the colord package.
 
 %prep
 %setup -q -n colord-1.4.4
+cd %{_builddir}/colord-1.4.4
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1557082358
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1585567227
+export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
@@ -159,14 +160,25 @@ export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
 export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
 export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
 export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
-CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false -Dvapi=true  builddir
+CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --libdir=lib64 --prefix=/usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false -Dvapi=true  builddir
 ninja -v -C builddir
+
+%check
+export LANG=C.UTF-8
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
+meson test -C builddir || :
 
 %install
 mkdir -p %{buildroot}/usr/share/package-licenses/colord
-cp COPYING %{buildroot}/usr/share/package-licenses/colord/COPYING
+cp %{_builddir}/colord-1.4.4/COPYING %{buildroot}/usr/share/package-licenses/colord/4cc77b90af91e615a64ae04893fdffa7939db84c
 DESTDIR=%{buildroot} ninja -C builddir install
 %find_lang colord
+## install_append content
+#mkdir -p %{buildroot}/usr/share/gettext/its
+#cp policy/its/polkit.*  %{buildroot}/usr/share/gettext/its
+## install_append end
 
 %files
 %defattr(-,root,root,-)
@@ -385,7 +397,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/colord/COPYING
+/usr/share/package-licenses/colord/4cc77b90af91e615a64ae04893fdffa7939db84c
 
 %files services
 %defattr(-,root,root,-)
