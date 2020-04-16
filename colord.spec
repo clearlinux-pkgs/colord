@@ -6,7 +6,7 @@
 #
 Name     : colord
 Version  : 1.4.4
-Release  : 23
+Release  : 24
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
 Source1  : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz.asc
@@ -141,6 +141,15 @@ Group: Systemd services
 services components for the colord package.
 
 
+%package tests
+Summary: tests components for the colord package.
+Group: Default
+Requires: colord = %{version}-%{release}
+
+%description tests
+tests components for the colord package.
+
+
 %prep
 %setup -q -n colord-1.4.4
 cd %{_builddir}/colord-1.4.4
@@ -151,16 +160,16 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1585567227
+export SOURCE_DATE_EPOCH=1587053659
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
 export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
-CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --libdir=lib64 --prefix=/usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false -Dvapi=true  builddir
+CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --libdir=lib64 --prefix=/usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false -Dvapi=true -Dinstalled_tests=true  builddir
 ninja -v -C builddir
 
 %check
@@ -403,6 +412,29 @@ DESTDIR=%{buildroot} ninja -C builddir install
 %defattr(-,root,root,-)
 /usr/lib/systemd/system/colord.service
 /usr/lib/systemd/user/colord-session.service
+
+%files tests
+%defattr(-,root,root,-)
+/usr/libexec/installed-tests/colord/DELL-U2713H.bin
+/usr/libexec/installed-tests/colord/LG-L225W-External.bin
+/usr/libexec/installed-tests/colord/Lenovo-T61-Internal.bin
+/usr/libexec/installed-tests/colord/calibration.ccmx
+/usr/libexec/installed-tests/colord/colord-test-daemon
+/usr/libexec/installed-tests/colord/colord-test-private
+/usr/libexec/installed-tests/colord/corrupt-dict.icc
+/usr/libexec/installed-tests/colord/crayons.icc
+/usr/libexec/installed-tests/colord/empty.icc
+/usr/libexec/installed-tests/colord/example.cmf
+/usr/libexec/installed-tests/colord/example.sp
+/usr/libexec/installed-tests/colord/ibm-t61.icc
+/usr/libexec/installed-tests/colord/measured.ti3
+/usr/libexec/installed-tests/colord/normalised.ti3
+/usr/libexec/installed-tests/colord/raw.ti3
+/usr/libexec/installed-tests/colord/reference.ti3
+/usr/libexec/installed-tests/colord/test.ccss
+/usr/libexec/installed-tests/colord/test.sp
+/usr/share/installed-tests/colord/colord-daemon.test
+/usr/share/installed-tests/colord/colord-private.test
 
 %files locales -f colord.lang
 %defattr(-,root,root,-)
