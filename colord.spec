@@ -5,11 +5,11 @@
 # Source0 file verified with key 0x17ACBA8DFA970E17 (richard@hughsie.com)
 #
 Name     : colord
-Version  : 1.4.4
-Release  : 25
-URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
-Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz
-Source1  : https://www.freedesktop.org/software/colord/releases/colord-1.4.4.tar.xz.asc
+Version  : 1.4.5
+Release  : 26
+URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.5.tar.xz
+Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.5.tar.xz
+Source1  : https://www.freedesktop.org/software/colord/releases/colord-1.4.5.tar.xz.asc
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0
@@ -23,13 +23,13 @@ Requires: colord-locales = %{version}-%{release}
 Requires: colord-services = %{version}-%{release}
 BuildRequires : buildreq-meson
 BuildRequires : docbook-xml
-BuildRequires : gobject-introspection
 BuildRequires : gobject-introspection-dev
 BuildRequires : gtk-doc
 BuildRequires : intltool-dev
 BuildRequires : libgudev-dev
 BuildRequires : libxslt
 BuildRequires : pkgconfig(bash-completion)
+BuildRequires : pkgconfig(gudev-1.0)
 BuildRequires : pkgconfig(gusb)
 BuildRequires : pkgconfig(lcms2)
 BuildRequires : pkgconfig(polkit-gobject-1)
@@ -38,7 +38,6 @@ BuildRequires : pkgconfig(udev)
 BuildRequires : pkgconfig(valgrind)
 BuildRequires : vala
 BuildRequires : valgrind
-Patch1: backport-remove-corrupted.patch
 
 %description
 colord
@@ -151,16 +150,15 @@ tests components for the colord package.
 
 
 %prep
-%setup -q -n colord-1.4.4
-cd %{_builddir}/colord-1.4.4
-%patch1 -p1
+%setup -q -n colord-1.4.5
+cd %{_builddir}/colord-1.4.5
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1587053659
+export SOURCE_DATE_EPOCH=1615511468
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -181,13 +179,9 @@ meson test -C builddir || :
 
 %install
 mkdir -p %{buildroot}/usr/share/package-licenses/colord
-cp %{_builddir}/colord-1.4.4/COPYING %{buildroot}/usr/share/package-licenses/colord/4cc77b90af91e615a64ae04893fdffa7939db84c
+cp %{_builddir}/colord-1.4.5/COPYING %{buildroot}/usr/share/package-licenses/colord/4cc77b90af91e615a64ae04893fdffa7939db84c
 DESTDIR=%{buildroot} ninja -C builddir install
 %find_lang colord
-## install_append content
-#mkdir -p %{buildroot}/usr/share/gettext/its
-#cp policy/its/polkit.*  %{buildroot}/usr/share/gettext/its
-## install_append end
 
 %files
 %defattr(-,root,root,-)

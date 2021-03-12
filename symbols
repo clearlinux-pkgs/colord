@@ -244,6 +244,7 @@ libcolord.so.2:cd_edid_parse
 libcolord.so.2:cd_edid_reset
 libcolord.so.2:cd_icc_add_metadata
 libcolord.so.2:cd_icc_create_default
+libcolord.so.2:cd_icc_create_default_full
 libcolord.so.2:cd_icc_create_from_edid
 libcolord.so.2:cd_icc_create_from_edid_data
 libcolord.so.2:cd_icc_error_quark
@@ -312,6 +313,7 @@ libcolord.so.2:cd_icc_store_search_location
 libcolord.so.2:cd_icc_store_set_cache
 libcolord.so.2:cd_icc_store_set_load_flags
 libcolord.so.2:cd_icc_to_string
+libcolord.so.2:cd_icc_utils_get_adaptation_matrix
 libcolord.so.2:cd_icc_utils_get_coverage
 libcolord.so.2:cd_interp_akima_get_type
 libcolord.so.2:cd_interp_akima_new
@@ -372,6 +374,7 @@ libcolord.so.2:cd_mat33_copy
 libcolord.so.2:cd_mat33_determinant
 libcolord.so.2:cd_mat33_get_data
 libcolord.so.2:cd_mat33_init
+libcolord.so.2:cd_mat33_is_finite
 libcolord.so.2:cd_mat33_matrix_multiply
 libcolord.so.2:cd_mat33_normalize
 libcolord.so.2:cd_mat33_reciprocal
@@ -669,6 +672,7 @@ libcolordprivate.so.2:cd_edid_parse
 libcolordprivate.so.2:cd_edid_reset
 libcolordprivate.so.2:cd_icc_add_metadata
 libcolordprivate.so.2:cd_icc_create_default
+libcolordprivate.so.2:cd_icc_create_default_full
 libcolordprivate.so.2:cd_icc_create_from_edid
 libcolordprivate.so.2:cd_icc_create_from_edid_data
 libcolordprivate.so.2:cd_icc_error_quark
@@ -737,6 +741,7 @@ libcolordprivate.so.2:cd_icc_store_search_location
 libcolordprivate.so.2:cd_icc_store_set_cache
 libcolordprivate.so.2:cd_icc_store_set_load_flags
 libcolordprivate.so.2:cd_icc_to_string
+libcolordprivate.so.2:cd_icc_utils_get_adaptation_matrix
 libcolordprivate.so.2:cd_icc_utils_get_coverage
 libcolordprivate.so.2:cd_interp_akima_get_type
 libcolordprivate.so.2:cd_interp_akima_new
@@ -797,6 +802,7 @@ libcolordprivate.so.2:cd_mat33_copy
 libcolordprivate.so.2:cd_mat33_determinant
 libcolordprivate.so.2:cd_mat33_get_data
 libcolordprivate.so.2:cd_mat33_init
+libcolordprivate.so.2:cd_mat33_is_finite
 libcolordprivate.so.2:cd_mat33_matrix_multiply
 libcolordprivate.so.2:cd_mat33_normalize
 libcolordprivate.so.2:cd_mat33_reciprocal

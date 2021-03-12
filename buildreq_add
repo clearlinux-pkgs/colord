@@ -1,9 +1,8 @@
 # This file contains additional build requirements that did not get
 # picked up automatically. One name per line, no whitespace.
-gobject-introspection-dev
-valgrind
-intltool-dev
-gobject-introspection
 docbook-xml
+gobject-introspection-dev
 gtk-doc
+intltool-dev
 libxslt
+valgrind

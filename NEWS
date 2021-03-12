@@ -1,3 +1,23 @@
+Version 1.4.5
+~~~~~~~~~~~~~
+Released: 2020-11-02
+
+New Features:
+ - Add cd_icc_create_default_full (Aaron Plattner)
+ - Add cd_icc_utils_get_adaptation_matrix (Aaron Plattner)
+ - Add cd_mat33_is_finite (Aaron Plattner)
+ - Add support for datacolor SpyderX (Richard Brown)
+
+Bugfixes:
+ - Check for errors from more sqlite calls (Ross Burton)
+ - Fix cd_icc_load_data() annotation for the data array (Elmar Hoffmann)
+ - Fix cd-sensor-dummy (Christopher James Halse Rogers)
+ - Fix more annotation for data arrays (Elmar Hoffmann)
+ - Fix owner and permissions on existing state files (Will Thompson)
+ - Fix segfault due to dereferencing NULL pointer (Simon Munton)
+ - Make the build reproductible (Laurent Bigonville)
+ - Refactor opening of mapping database and try again if fails (Ross Burton)
+
 Version 1.4.4
 ~~~~~~~~~~~~~
 Released: 2019-03-08
@@ -353,7 +373,7 @@ Bugfixes:
  - Fix the blue primary check so ProPhotoRGB is not marked as invalid (Richard Hughes)
  - Fix the tag 'size' when viewing a profile in cd-iccdump with newer lcms versions (Richard Hughes)
  - Only include libudev in Requires.private on Linux (Richard Hughes)
- - Use the corect sensor-kind values for GretagMacbeth sensors (Richard Hughes)
+ - Use the correct sensor-kind values for GretagMacbeth sensors (Richard Hughes)
  - colord: Do not invalidate the CdTransform if the CdIcc object does not change (Richard Hughes)
  - colord: Do not use G_GNUC_WARN_UNUSED_RESULT when uninhibiting (Richard Hughes)
  - colord: Fix a potential crash when destroying a CdIt8 object (Richard Hughes)
@@ -996,7 +1016,7 @@ Bugfixes:
  - Don't be obscure when the user passes a device-id to colormgr (Richard Hughes)
  - Fix a memory leak when getting properties from a device (Richard Hughes)
  - Fix colormgr device-get-default-profile (Richard Hughes)
- - Fix some conection bugs in colormgr (Florian Höch, Richard Hughes)
+ - Fix some connection bugs in colormgr (Florian Höch, Richard Hughes)
  - Fix some potential SQL injections (Ludwig Nussel, Vincent Untz)
  - Make gusb optional (Ludwig Nussel)
  - Only use the udev USB helper if the PID and VID have matches (Richard Hughes)
@@ -1055,7 +1075,7 @@ Bugfixes:
  - Check if a file is really an ICC profile before importing it (Richard Hughes)
  - Detect libusb_strerror in configure rather than relying on the version (Richard Hughes)
  - Do not fail make check if there is no available local colord process to use (Richard Hughes)
- - Ensure the profiles are sorted by thier timestamp during login (Richard Hughes)
+ - Ensure the profiles are sorted by their timestamp during login (Richard Hughes)
  - Ensure the volume-sourced profiles are not marked as systemwide profiles (Richard Hughes)
  - Exit with an error when trying to connect to a device that does not exist (Richard Hughes)
  - Remove duplicate call to complete in libcolord (Alban Browaeys)
