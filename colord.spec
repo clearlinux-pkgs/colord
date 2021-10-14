@@ -6,7 +6,7 @@
 #
 Name     : colord
 Version  : 1.4.5
-Release  : 26
+Release  : 27
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.5.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.5.tar.xz
 Source1  : https://www.freedesktop.org/software/colord/releases/colord-1.4.5.tar.xz.asc
@@ -16,6 +16,7 @@ License  : GPL-2.0
 Requires: colord-bin = %{version}-%{release}
 Requires: colord-config = %{version}-%{release}
 Requires: colord-data = %{version}-%{release}
+Requires: colord-filemap = %{version}-%{release}
 Requires: colord-lib = %{version}-%{release}
 Requires: colord-libexec = %{version}-%{release}
 Requires: colord-license = %{version}-%{release}
@@ -53,6 +54,7 @@ Requires: colord-libexec = %{version}-%{release}
 Requires: colord-config = %{version}-%{release}
 Requires: colord-license = %{version}-%{release}
 Requires: colord-services = %{version}-%{release}
+Requires: colord-filemap = %{version}-%{release}
 
 %description bin
 bin components for the colord package.
@@ -95,12 +97,21 @@ Group: Documentation
 doc components for the colord package.
 
 
+%package filemap
+Summary: filemap components for the colord package.
+Group: Default
+
+%description filemap
+filemap components for the colord package.
+
+
 %package lib
 Summary: lib components for the colord package.
 Group: Libraries
 Requires: colord-data = %{version}-%{release}
 Requires: colord-libexec = %{version}-%{release}
 Requires: colord-license = %{version}-%{release}
+Requires: colord-filemap = %{version}-%{release}
 
 %description lib
 lib components for the colord package.
@@ -111,6 +122,7 @@ Summary: libexec components for the colord package.
 Group: Default
 Requires: colord-config = %{version}-%{release}
 Requires: colord-license = %{version}-%{release}
+Requires: colord-filemap = %{version}-%{release}
 
 %description libexec
 libexec components for the colord package.
@@ -152,36 +164,43 @@ tests components for the colord package.
 %prep
 %setup -q -n colord-1.4.5
 cd %{_builddir}/colord-1.4.5
+pushd ..
+cp -a colord-1.4.5 buildavx2
+popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1615511468
+export SOURCE_DATE_EPOCH=1634254405
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=auto "
 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --libdir=lib64 --prefix=/usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false -Dvapi=true -Dinstalled_tests=true  builddir
 ninja -v -C builddir
+CFLAGS="$CFLAGS -m64 -march=x86-64-v3 -O3" CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v3 " LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3" meson --libdir=lib64 --prefix=/usr --buildtype=plain --localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false -Dvapi=true -Dinstalled_tests=true  builddiravx2
+ninja -v -C builddiravx2
 
 %check
 export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-meson test -C builddir || :
+meson test -C builddir --print-errorlogs || :
 
 %install
 mkdir -p %{buildroot}/usr/share/package-licenses/colord
 cp %{_builddir}/colord-1.4.5/COPYING %{buildroot}/usr/share/package-licenses/colord/4cc77b90af91e615a64ae04893fdffa7939db84c
+DESTDIR=%{buildroot}-v3 ninja -C builddiravx2 install
 DESTDIR=%{buildroot} ninja -C builddir install
 %find_lang colord
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
@@ -193,6 +212,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/bin/cd-iccdump
 /usr/bin/cd-it8
 /usr/bin/colormgr
+/usr/share/clear/optimized-elf/bin*
 
 %files config
 %defattr(-,root,root,-)
@@ -377,6 +397,10 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/share/gtk-doc/html/colord/up-insensitive.png
 /usr/share/gtk-doc/html/colord/up.png
 
+%files filemap
+%defattr(-,root,root,-)
+/usr/share/clear/filemap/filemap-colord
+
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/colord-plugins/libcolord_sensor_camera.so
@@ -392,11 +416,13 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/lib64/libcolordprivate.so.2.0.5
 /usr/lib64/libcolorhug.so.2
 /usr/lib64/libcolorhug.so.2.0.5
+/usr/share/clear/optimized-elf/lib*
 
 %files libexec
 %defattr(-,root,root,-)
 /usr/libexec/colord
 /usr/libexec/colord-session
+/usr/share/clear/optimized-elf/exec*
 
 %files license
 %defattr(0644,root,root,0755)
@@ -427,6 +453,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/libexec/installed-tests/colord/reference.ti3
 /usr/libexec/installed-tests/colord/test.ccss
 /usr/libexec/installed-tests/colord/test.sp
+/usr/share/clear/optimized-elf/test*
 /usr/share/installed-tests/colord/colord-daemon.test
 /usr/share/installed-tests/colord/colord-private.test
 
