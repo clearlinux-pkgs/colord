@@ -1,4 +1,4 @@
-1.4.5
+1.4.6
 libgudev-dev
 pkgconfig(gudev-1.0)
 pkgconfig(valgrind)

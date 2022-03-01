@@ -1,1 +1,7 @@
---localstatedir=/var --sharedstatedir=/var/lib -Denable-argyllcms-sensor=false -Dwith-daemon-user=colord -Denable-docs=false -Denable-man=false -Dargyllcms_sensor=false -Dman=false -Dvapi=true -Dinstalled_tests=true
+-Dlocalstatedir=/var
+-Dargyllcms_sensor=false
+-Ddaemon_user=colord
+-Ddocs=false
+-Dman=false
+-Dvapi=true
+-Dinstalled_tests=true
