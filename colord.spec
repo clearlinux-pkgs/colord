@@ -6,7 +6,7 @@
 #
 Name     : colord
 Version  : 1.4.6
-Release  : 31
+Release  : 32
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.6.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.6.tar.xz
 Source1  : https://www.freedesktop.org/software/colord/releases/colord-1.4.6.tar.xz.asc
@@ -165,7 +165,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1646093233
+export SOURCE_DATE_EPOCH=1656369525
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -204,7 +204,7 @@ cp %{_builddir}/colord-1.4.6/COPYING %{buildroot}/usr/share/package-licenses/col
 DESTDIR=%{buildroot}-v3 ninja -C builddiravx2 install
 DESTDIR=%{buildroot} ninja -C builddir install
 %find_lang colord
-/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot} %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
@@ -355,6 +355,9 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/include/colord-1/colorhug/ch-math.h
 /usr/include/colord-1/colorhug/ch-version.h
 /usr/include/colord-1/colorhug/colorhug.h
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcolord.so
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcolordprivate.so
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcolorhug.so
 /usr/lib64/libcolord.so
 /usr/lib64/libcolordprivate.so
 /usr/lib64/libcolorhug.so
@@ -374,13 +377,18 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/lib64/colord-sensors/libcolord_sensor_dtp94.so
 /usr/lib64/colord-sensors/libcolord_sensor_dummy.so
 /usr/lib64/colord-sensors/libcolord_sensor_huey.so
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcolord.so.2
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcolord.so.2.0.5
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcolordprivate.so.2
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcolordprivate.so.2.0.5
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcolorhug.so.2
+/usr/lib64/glibc-hwcaps/x86-64-v3/libcolorhug.so.2.0.5
 /usr/lib64/libcolord.so.2
 /usr/lib64/libcolord.so.2.0.5
 /usr/lib64/libcolordprivate.so.2
 /usr/lib64/libcolordprivate.so.2.0.5
 /usr/lib64/libcolorhug.so.2
 /usr/lib64/libcolorhug.so.2.0.5
-/usr/share/clear/optimized-elf/lib*
 
 %files libexec
 %defattr(-,root,root,-)
