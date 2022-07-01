@@ -6,7 +6,7 @@
 #
 Name     : colord
 Version  : 1.4.6
-Release  : 32
+Release  : 33
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.6.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.6.tar.xz
 Source1  : https://www.freedesktop.org/software/colord/releases/colord-1.4.6.tar.xz.asc
@@ -165,7 +165,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1656369525
+export SOURCE_DATE_EPOCH=1656700762
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -389,6 +389,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/lib64/libcolordprivate.so.2.0.5
 /usr/lib64/libcolorhug.so.2
 /usr/lib64/libcolorhug.so.2.0.5
+/usr/share/clear/optimized-elf/other*
 
 %files libexec
 %defattr(-,root,root,-)
