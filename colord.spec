@@ -6,7 +6,7 @@
 #
 Name     : colord
 Version  : 1.4.6
-Release  : 33
+Release  : 34
 URL      : https://www.freedesktop.org/software/colord/releases/colord-1.4.6.tar.xz
 Source0  : https://www.freedesktop.org/software/colord/releases/colord-1.4.6.tar.xz
 Source1  : https://www.freedesktop.org/software/colord/releases/colord-1.4.6.tar.xz.asc
